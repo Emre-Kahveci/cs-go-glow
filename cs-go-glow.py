@@ -17,7 +17,7 @@ def glow() -> None:
         local_player = pm.read_int(client + localPlayer)
         glow_Object_Manager = pm.read_int(client + glowObjectManager)
 
-        for i in range(64):
+        for i in range(1,64):
             entity = pm.read_int(client + entityList + i * 0x10)
 
             #if the entity is not empty and not local_player
