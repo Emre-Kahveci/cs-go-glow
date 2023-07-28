@@ -2,10 +2,10 @@ import pymem
 from time import sleep
 
 # Offsets
-localPlayer = 0x00DEA98C
+currentPlayer = 0x00DEA98C
 entityList = 0x04DFFF7C
 glowObjectManager = 0x0535AA08
-teamNum = 0x00F4
+teamNo = 0x00F4
 glowIndex = 0x010488
 
 def glow() -> None:
@@ -14,21 +14,21 @@ def glow() -> None:
     client = pymem.process.module_from_name(pm.process_handle, "client.dll").lpBaseOfDll # access client.dll
 
     while True:
-        local_player = pm.read_int(client + localPlayer)
+        current_player = pm.read_int(client + currentPlayer)
         glow_Object_Manager = pm.read_int(client + glowObjectManager)
 
         for i in range(1,64):
             entity = pm.read_int(client + entityList + i * 0x10)
 
             #if the entity is not empty and not local_player
-            if entity == 0 or entity == local_player:
+            if entity == 0 or entity == current_player:
                 continue
             
-            entityTeamNum = pm.read_int(entity + teamNum)
-            localPlayerTeamNum = pm.read_int(local_player + teamNum)
+            entityTeamNo = pm.read_int(entity + teamNo)
+            localPlayerTeamNo = pm.read_int(current_player + teamNo)
 
             #if entity and local_player are not on the same team
-            if entityTeamNum == localPlayerTeamNum:
+            if entityTeamNo == localPlayerTeamNo:
                 continue
             
             glow_Index = pm.read_int(entity + glowIndex)
