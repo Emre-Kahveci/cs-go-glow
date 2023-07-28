@@ -2,33 +2,33 @@ import pymem
 from time import sleep
 
 # Offsets
-currentPlayer = 0x00DEA98C
+localPlayer = 0x00DEA98C
 entityList = 0x04DFFF7C
 glowObjectManager = 0x0535AA08
-teamNo = 0x00F4
+teamNum = 0x00F4
 glowIndex = 0x010488
 
 def glow() -> None:
     pm = pymem.Pymem('csgo.exe') # find csgo.exe
-    
+
     client = pymem.process.module_from_name(pm.process_handle, "client.dll").lpBaseOfDll # access client.dll
 
     while True:
-        current_player = pm.read_int(client + currentPlayer)
+        local_Player = pm.read_int(client + localPlayer)
         glow_Object_Manager = pm.read_int(client + glowObjectManager)
 
         for i in range(1,64):
             entity = pm.read_int(client + entityList + i * 0x10)
 
             #if the entity is not empty and not local_player
-            if entity == 0 or entity == current_player:
+            if entity == 0 or entity == local_Player:
                 continue
             
-            entityTeamNo = pm.read_int(entity + teamNo)
-            localPlayerTeamNo = pm.read_int(current_player + teamNo)
+            entityTeamNum = pm.read_int(entity + teamNum)
+            localPlayerTeamNum = pm.read_int(local_Player + teamNum)
 
             #if entity and local_player are not on the same team
-            if entityTeamNo == localPlayerTeamNo:
+            if entityTeamNum == localPlayerTeamNum:
                 continue
             
             glow_Index = pm.read_int(entity + glowIndex)
