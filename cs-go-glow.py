@@ -17,30 +17,30 @@ def glow() -> None:
     
     while True:
 
-        local_player = pm.read_uint(client + offsets["localPlayer"])
-        glow_Object_Manager = pm.read_uint(client + offsets["glowObjectManager"])
+        localPlayer = pm.read_uint(client + offsets["localPlayer"])
+        glowObjectManager = pm.read_uint(client + offsets["glowObjectManager"])
 
         for i in range(1,64):
             entity = pm.read_uint(client + offsets["entityList"] + i * 0x10)
 
-            #if the entity is not empty and not local_player
-            if entity == 0 or entity == local_player:
+            #if the entity is not empty and not localPlayer
+            if entity == 0 or entity == localPlayer:
                 continue
             
-            #if entity and local_player are not on the same team
-            if pm.read_uint(entity + offsets["teamNum"]) == pm.read_uint(local_player + offsets["teamNum"]):
+            #if entity and localPlayer are not on the same team
+            if pm.read_uint(entity + offsets["teamNum"]) == pm.read_uint(localPlayer + offsets["teamNum"]):
                 continue
             
-            glow_Index = pm.read_uint(entity + offsets["glowIndex"])
-            glow_Object = glow_Object_Manager + (glow_Index * 0x38)
+            glowIndex = pm.read_uint(entity + offsets["glowIndex"])
+            glowObject = glowObjectManager + (glowIndex * 0x38)
 
             #glow
-            pm.write_float(glow_Object + 0x8, 0.0) # red
-            pm.write_float(glow_Object + 0xC, 1.0) # green
-            pm.write_float(glow_Object + 0x10, 0.0) # blue
-            pm.write_float(glow_Object + 0x14, 1.0) # alpha
-            pm.write_bool(glow_Object + 0x27, True)
-            pm.write_bool(glow_Object + 0x28, True)
+            pm.write_float(glowObject + 0x8, 0.0) # red
+            pm.write_float(glowObject + 0xC, 1.0) # green
+            pm.write_float(glowObject + 0x10, 0.0) # blue
+            pm.write_float(glowObject + 0x14, 1.0) # alpha
+            pm.write_bool(glowObject + 0x27, True)
+            pm.write_bool(glowObject + 0x28, True)
 
         sleep(0.01)
 if __name__ == "__main__":
